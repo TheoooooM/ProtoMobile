@@ -13,8 +13,8 @@ public class QTE : MonoBehaviour
     private int[] _qteSequence;
 
     private SwipeDetector _swipeDetector;
-
-    [SerializeField] private TextMeshProUGUI text;
+    
+    [SerializeField] private TextMeshProUGUI _text;
 
     void Start()
     {
@@ -23,16 +23,16 @@ public class QTE : MonoBehaviour
 
         StartQte();
     }
-    
-    
 
     void Update()
     {
-    
-    
-    
         _currentTime += Time.deltaTime;
         if (_currentTime >= timeLimit)
+        {
+            EndQte();
+        }
+        
+        if (_currentQte >= totalQte)
         {
             EndQte();
         }
@@ -42,16 +42,16 @@ public class QTE : MonoBehaviour
             switch (_qteSequence[_currentQte])
             {
                 case 0:
-                    text.text = "Swipe Up";
+                    _text.text = "↑";
                     break;
                 case 1:
-                    text.text = "Swipe Down";
+                    _text.text = "↓";
                     break;
                 case 2:
-                    text.text = "Swipe Left";
+                    _text.text = "←";
                     break;
                 case 3:
-                    text.text = "Swipe Right"; 
+                    _text.text = "→";
                     break;
             }
         }
@@ -94,11 +94,12 @@ public class QTE : MonoBehaviour
 
     void EndQte()
     {
-        Debug.Log("QTE Over");
+        _text.text = "QTE Ended";
     }
 
     void OnSwipeUp()
     {
+        if (_qteSequence.Length <= 0) return;
         if (_qteSequence[_currentQte] == 0)
         {
             _currentQte++;
@@ -109,10 +110,12 @@ public class QTE : MonoBehaviour
         {
             EndQte();
         }
+
     }
 
     void OnSwipeDown()
     {
+        if (_qteSequence.Length <= 0) return;
         if (_qteSequence[_currentQte] == 1)
         {
             _currentQte++;
@@ -127,6 +130,7 @@ public class QTE : MonoBehaviour
 
     void OnSwipeLeft()
     {
+        if (_qteSequence.Length <= 0) return;
         if (_qteSequence[_currentQte] == 2)
         {
             _currentQte++;
@@ -142,6 +146,7 @@ public class QTE : MonoBehaviour
     
     void OnSwipeRight()
     {
+        if (_qteSequence.Length <= 0) return;
         if (_qteSequence[_currentQte] == 3)
         {
             _currentQte++;

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public delegate void SwipeAction(SwipeData swipeData);
 
@@ -11,14 +12,15 @@ public class SwipeDetector : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.touchCount <= 0) return;
+        if (Input.GetTouch(0).phase == TouchPhase.Began)
         {
-            _startPosition = Input.mousePosition;
+            _startPosition = Input.GetTouch(0).position;
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetTouch(0).phase == TouchPhase.Ended)
         {
-            Vector2 endPosition = Input.mousePosition;
+            Vector2 endPosition = Input.GetTouch(0).position;
             Vector2 swipeVector = endPosition - _startPosition;
 
             float swipeDistance = Vector2.Distance(_startPosition, endPosition);
@@ -35,7 +37,6 @@ public class SwipeDetector : MonoBehaviour
                         endPosition = endPosition,
                         direction = SwipeDirection.Up
                     });
-                    Debug.Log("Swip Up");
                 }
                 else if (swipeVector.y < 0 && swipeVector.x > -0.5f && swipeVector.x < 0.5f)
                 {
@@ -45,7 +46,6 @@ public class SwipeDetector : MonoBehaviour
                         endPosition = endPosition,
                         direction = SwipeDirection.Down
                     });
-                    Debug.Log("Swip Down");
                 }
                 else if (swipeVector.x < 0 && swipeVector.y > -0.5f && swipeVector.y < 0.5f)
                 {
@@ -55,7 +55,6 @@ public class SwipeDetector : MonoBehaviour
                         endPosition = endPosition,
                         direction = SwipeDirection.Left
                     });
-                    Debug.Log("Swip Left");
                 }
                 else if (swipeVector.x > 0 && swipeVector.y > -0.5f && swipeVector.y < 0.5f)
                 {
@@ -65,7 +64,6 @@ public class SwipeDetector : MonoBehaviour
                         endPosition = endPosition,
                         direction = SwipeDirection.Right
                     });
-                    Debug.Log("Swip Right");
                 }
             }
         }
