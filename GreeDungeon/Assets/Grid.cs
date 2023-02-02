@@ -17,12 +17,6 @@ public class Grid : MonoBehaviour
         Init();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void Init()
     {
         grid = new Tile[(int)gridSize.x, (int)gridSize.y];
@@ -51,20 +45,20 @@ public class Grid : MonoBehaviour
         }
     }
 
-    public Tile GetNeighboor(Vector2 boardPos, PlayerController.Side side)
+    public Tile GetNeighboor(Vector2 boardPos, Enums.Side side)
     {
         switch (side)
         {
-            case PlayerController.Side.up :
+            case Enums.Side.up :
                 if (boardPos.y+1 == gridSize.y) return null;
                 return  grid[(int)boardPos.x,(int)boardPos.y+1];
-            case PlayerController.Side.left :
+            case Enums.Side.left :
                 if (boardPos.x == 0) return null;
                 return  grid[(int)boardPos.x-1,(int)boardPos.y];
-            case PlayerController.Side.right :
+            case Enums.Side.right :
                 if (boardPos.x+1 == gridSize.x) return null;
                 return  grid[(int)boardPos.x+1,(int)boardPos.y];
-            case PlayerController.Side.down :
+            case Enums.Side.down :
                 if (boardPos.y == 0) return null;
                 return  grid[(int)boardPos.x,(int)boardPos.y-1];
             default: return null;

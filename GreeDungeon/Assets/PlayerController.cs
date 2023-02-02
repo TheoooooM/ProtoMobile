@@ -7,10 +7,7 @@ using Task = System.Threading.Tasks.Task;
 
 public class PlayerController : MonoBehaviour
 {
-    public enum Side
-    {
-        up,left,right,down
-    }
+    
     
     private bool swiping;
     private Vector2 swipStartPos;
@@ -48,7 +45,7 @@ public class PlayerController : MonoBehaviour
         {
             if(dir.x>=0)
             {
-                var neighbor = playGrid.GetNeighboor(gridPos, Side.right);
+                var neighbor = playGrid.GetNeighboor(gridPos, Enums.Side.right);
                 if (neighbor != null)
                 {
                     Move(neighbor.worldPos);
@@ -58,7 +55,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                var neighbor = playGrid.GetNeighboor(gridPos, Side.left);
+                var neighbor = playGrid.GetNeighboor(gridPos, Enums.Side.left);
                 if (neighbor != null)
                 {
                     Move(neighbor.worldPos);
@@ -70,7 +67,7 @@ public class PlayerController : MonoBehaviour
         {
             if (dir.y >= 0)
             {
-                var neighbor = playGrid.GetNeighboor(gridPos, Side.up);
+                var neighbor = playGrid.GetNeighboor(gridPos, Enums.Side.up);
                 if (neighbor != null)
                 {
                     Move(neighbor.worldPos);
@@ -79,7 +76,7 @@ public class PlayerController : MonoBehaviour
             }
             else 
             {
-                var neighbor = playGrid.GetNeighboor(gridPos, Side.down);
+                var neighbor = playGrid.GetNeighboor(gridPos, Enums.Side.down);
                 if (neighbor != null)
                 {
                     Move(neighbor.worldPos);
