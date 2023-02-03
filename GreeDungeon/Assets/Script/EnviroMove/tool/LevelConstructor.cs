@@ -26,7 +26,7 @@ public class LevelConstructor : MonoBehaviour
     [SerializeField] private List<BlockExpection> exeptionList;
     private IBoardable[,] blockGrid;
 
-    private void Start() => Bake();
+    private void Awake() => Bake();
 
     public void Bake()
     {
@@ -52,9 +52,7 @@ public class LevelConstructor : MonoBehaviour
                         Quaternion.identity, transform);
                     obj.name = $"({x},{y})";
                     var boardable = obj.GetComponent<IBoardable>();
-                    if (boardable == null)
-                        throw new NullReferenceException($"IBoardable isn't Set to {blocks[(int)currentType].name}");
-                    blockGrid[x, y] = boardable;
+                    blockGrid[x, y] = boardable ?? throw new NullReferenceException($"IBoardable isn't Set to {blocks[(int)currentType].name}");
                     boardable.SetMaster(this, currentPos);
                 }
             }
@@ -89,6 +87,11 @@ public class LevelConstructor : MonoBehaviour
                 return  blockGrid[(int)boardPos.x,(int)boardPos.y-1];
             default: return null;
         }
+    }
+
+    public IBoardable GetPosition(Vector2 position)
+    {
+        return blockGrid[(int)position.x, (int)position.y];
     }
 
     public bool TryMove(Vector2 boardPos, Enums.Side side, IBoardable sender)

@@ -4,7 +4,6 @@ namespace Script.EnviroMove
 {
     public class MoveBlock : Block, IInteractable, IBoardable
     {
-        public LevelConstructor grid; //TODO : remove public
         private Vector2 gridPosition; 
         private Vector3 startScale;
 
