@@ -6,7 +6,10 @@ namespace Script.EnviroMove
     {
         protected LevelConstructor grid;
         private Vector2 gridPos;
-    
+
+        protected bool haveTop;
+        protected bool isTop;
+
         public void SetMaster(LevelConstructor gridMaster, Vector2 pos)
         {
             grid = gridMaster;
@@ -22,5 +25,8 @@ namespace Script.EnviroMove
         {
             return transform.position;
         }
+
+        public bool isBlockOnTop() => haveTop;
+        public void SetTopState(bool state) => isTop = state;
     }
 }

@@ -18,6 +18,7 @@ public class InteractionDetector : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(touchPos);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
+            Debug.Log($"hit {hit.transform.name}");
             selectEntity = hit.transform.GetComponent<IInteractable>();
             selectEntity?.Select();
         }

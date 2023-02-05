@@ -13,16 +13,8 @@ namespace Script.EnviroMove
         }
 
 
-        public void Select()
-        {
-            Debug.Log("Receive Touch");
-            transform.localScale = startScale * 1.2f;
-        }
-
-        public void Deselect()
-        {
-            transform.localScale = startScale;
-        }
+        public void Select() => transform.localScale = startScale * 1.2f;
+        public void Deselect() => transform.localScale = startScale;
 
         public void Swipe(Enums.Side side)
         {

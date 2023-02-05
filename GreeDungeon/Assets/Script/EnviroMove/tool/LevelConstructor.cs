@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class LevelConstructor : MonoBehaviour
@@ -13,7 +14,7 @@ public class LevelConstructor : MonoBehaviour
     }
     
     [Serializable]
-    struct BlockExpection
+    struct BlockData
     {
         public Vector2 pos;
         public BlockType type;
@@ -23,8 +24,10 @@ public class LevelConstructor : MonoBehaviour
     [SerializeField] private GameObject[] blocks;
     [Header("Params")]
     [SerializeField] private Vector2 levelSize;
-    [SerializeField] private List<BlockExpection> exeptionList;
+    [SerializeField] private List<BlockData> exeptionList;
+    [SerializeField] private List<BlockData> topBlocks;
     private IBoardable[,] blockGrid;
+    private IBoardable[,] topBlockGrid;
 
     private void Awake() => Bake();
 
@@ -32,6 +35,7 @@ public class LevelConstructor : MonoBehaviour
     {
         ClearGrid();
         blockGrid = new IBoardable[(int) levelSize.x,(int)levelSize.y];
+        topBlockGrid = new IBoardable[(int) levelSize.x,(int)levelSize.y];
 
         var currentType = BlockType.empty;
         for (int y = 0; y < levelSize.y; y++)
@@ -54,6 +58,20 @@ public class LevelConstructor : MonoBehaviour
                     var boardable = obj.GetComponent<IBoardable>();
                     blockGrid[x, y] = boardable ?? throw new NullReferenceException($"IBoardable isn't Set to {blocks[(int)currentType].name}");
                     boardable.SetMaster(this, currentPos);
+                }
+
+                foreach (var block in topBlocks)
+                {
+                    if (block.pos == currentPos)
+                    {
+                        var obj = Instantiate(blocks[(int)block.type], new Vector3(x, .5f, y), quaternion.identity,
+                            transform);
+                        obj.name = $"({x},{y}) TOP";
+                        var boardable = obj.GetComponent<IBoardable>();
+                        blockGrid[x, y] = boardable ?? throw new NullReferenceException($"IBoardable isn't Set to {blocks[(int)currentType].name}");
+                        boardable.SetMaster(this, currentPos);
+                        boardable.SetTopState(true);
+                    }
                 }
             }
         }
@@ -94,7 +112,7 @@ public class LevelConstructor : MonoBehaviour
         return blockGrid[(int)position.x, (int)position.y];
     }
 
-    public bool TryMove(Vector2 boardPos, Enums.Side side, IBoardable sender)
+    public bool TryMove(Vector2 boardPos, Enums.Side side, IBoardable sender, bool top = false)
     {
         var neighbour = GetNeighboor(boardPos, side);
         if (neighbour == null)

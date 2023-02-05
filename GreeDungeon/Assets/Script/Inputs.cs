@@ -12,6 +12,8 @@ public class Inputs : MonoBehaviour
     private Vector2 touchStartPos;
     public event SideAction OnSwip = delegate{ };
     public event PositionAction OnTouch = delegate{ };
+    public event PositionAction OnMove = delegate{ };
+    public event PositionAction OnMoveDir = delegate{ };
     public event PositionAction OnRelease = delegate{ };
 
     void Awake() => Instance = this;
@@ -21,15 +23,22 @@ public class Inputs : MonoBehaviour
     void InputCheck()
     {
         if (Input.touches.Length == 0) return;
+        var actualPos = Input.touches[0].position;
         if (Input.touches[0].phase == TouchPhase.Began)
         {
-            touchStartPos = Input.touches[0].position;
+            touchStartPos = actualPos;
             OnTouch?.Invoke(touchStartPos);
+        }
+
+        if (Input.touches[0].phase == TouchPhase.Moved)
+        {
+            OnMove?.Invoke(actualPos);
+            OnMoveDir?.Invoke(actualPos-touchStartPos);
         }
 
         if (Input.touches[0].phase == TouchPhase.Ended)
         {
-            var touchEndPos = Input.touches[0].position;
+            var touchEndPos = actualPos;
             OnRelease?.Invoke(touchEndPos);
             TrySwipe(touchStartPos,touchEndPos);
         }
@@ -38,7 +47,6 @@ public class Inputs : MonoBehaviour
     void TrySwipe(Vector2 startPos, Vector2 endPos)
     {
         var dir = endPos - startPos;
-        if(Vector2.Distance(startPos, endPos)>= minimumSwipeDistance) 
-            OnSwip?.Invoke(Mathf.Abs(dir.x) > Mathf.Abs(dir.y)? dir.x >= 0 ? Enums.Side.right : Enums.Side.left : dir.y >= 0 ? Enums.Side.up : Enums.Side.down);
+        if(Vector2.Distance(startPos, endPos)>= minimumSwipeDistance) OnSwip?.Invoke(Mathf.Abs(dir.x) > Mathf.Abs(dir.y)? dir.x >= 0 ? Enums.Side.right : Enums.Side.left : dir.y >= 0 ? Enums.Side.up : Enums.Side.down);
     }
 }

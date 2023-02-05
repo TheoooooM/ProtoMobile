@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     [SerializeField] Vector2[] checkpoints;
     [SerializeField]private LevelConstructor levelReference;
+    private Vector2 startGridPosition;
+    private Vector2 gridPosition;
     [Space]
     [SerializeField] private float speed;
     private Queue<Vector3> checkpointPositions = new();
